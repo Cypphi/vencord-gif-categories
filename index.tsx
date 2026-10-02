@@ -96,18 +96,25 @@ function Categories({ accountId, favorites, query, original }: {
     }
 
     function dropProps(targetId: string | null) {
+        function acceptDrag(event: React.DragEvent<HTMLButtonElement>) {
+            if (busy || !event.dataTransfer.types.includes(DRAG_TYPE)) return;
+            event.preventDefault();
+            // Discord's global drag handler otherwise resets dropEffect to "none".
+            event.stopPropagation();
+            event.dataTransfer.dropEffect = "move";
+            event.currentTarget.dataset.dragOver = "true";
+        }
         return {
             "data-drop-target": targetId ?? "unsorted",
-            onDragOver(event: React.DragEvent<HTMLButtonElement>) {
-                if (busy || !event.dataTransfer.types.includes(DRAG_TYPE)) return;
-                event.preventDefault();
-                event.dataTransfer.dropEffect = "move";
-                event.currentTarget.dataset.dragOver = "true";
-            },
+            onDragEnter: acceptDrag,
+            onDragOver: acceptDrag,
             onDragLeave(event: React.DragEvent<HTMLButtonElement>) {
+                if (!event.dataTransfer.types.includes(DRAG_TYPE)) return;
+                event.stopPropagation();
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) delete event.currentTarget.dataset.dragOver;
             },
             onDrop(event: React.DragEvent<HTMLButtonElement>) {
+                if (!event.dataTransfer.types.includes(DRAG_TYPE)) return;
                 event.preventDefault();
                 event.stopPropagation();
                 delete event.currentTarget.dataset.dragOver;
@@ -214,6 +221,8 @@ export default definePlugin({
     },
     startDrag(event: React.DragEvent, gif: Gif) {
         if (!gif?.url || !event.currentTarget.closest(".vc-gif-categories")) return;
+        event.stopPropagation();
+        event.dataTransfer.clearData();
         event.dataTransfer.setData(DRAG_TYPE, gif.url);
         event.dataTransfer.effectAllowed = "move";
     },

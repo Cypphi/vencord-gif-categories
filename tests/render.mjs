@@ -91,5 +91,48 @@ for (const categories of [[], [{ id: "cats", name: "Cats", urls: [favorites[0].u
     }
 
 }
+// Discord's global HTML5 drag backend rejects unregistered drop targets.
+// Our own drag events must stop before reaching that handler.
+const transfer = new Map([["text/uri-list", favorites[0].url]]);
+function event() {
+    return {
+        stopped: false, prevented: false,
+        currentTarget: { closest: () => true, dataset: {}, contains: () => false },
+        relatedTarget: null,
+        stopPropagation() { this.stopped = true; },
+        preventDefault() { this.prevented = true; },
+        dataTransfer: {
+            get types() { return [...transfer.keys()]; },
+            clearData() { transfer.clear(); },
+            setData(type, value) { transfer.set(type, value); },
+            getData(type) { return transfer.get(type) ?? ""; }
+        }
+    };
+}
+const start = event();
+plugin.startDrag(start, favorites[0]);
+assert.ok(start.stopped, "Custom dragstart must not reach Discord's backend");
+assert.equal(start.dataTransfer.effectAllowed, "move");
+assert.deepEqual([...transfer.values()], [favorites[0].url]);
+assert.equal(transfer.has("text/uri-list"), false, "Native image payload must not trigger Discord's upload handling");
+const dragNodes = await render([{ id: "cats", name: "Cats", urls: [] }]);
+const folderCard = dragNodes.find(node => node.type === "native-grid").props.data[0];
+const folderButton = expand(plugin.renderCard(folderCard, {}, "folder")).find(node => node.type === "button");
+for (const handler of ["onDragEnter", "onDragOver", "onDragLeave"]) {
+    const drag = event();
+    folderButton.props[handler](drag);
+    // Same unregistered-target behavior as Discord's handleTopDragOver.
+    if (!drag.stopped) drag.dataTransfer.dropEffect = "none";
+    assert.ok(drag.stopped, `${handler} must be isolated from Discord's drag backend`);
+    if (handler !== "onDragLeave") {
+        assert.ok(drag.prevented);
+        assert.equal(drag.dataTransfer.dropEffect, "move");
+    }
+}
+transfer.clear();
+transfer.set("text/plain", "unrelated drag");
+const unrelated = event();
+folderButton.props.onDragOver(unrelated);
+assert.equal(unrelated.stopped, false, "Unrelated drags must remain untouched");
 assert.equal(plugin.renderCategories({ state: { resultType: "Search" } }, original), original);
-console.log("Rendering checks passed: fresh install, existing folder, last folder deleted, one native grid, card order, no toolbars, native search unchanged.");
+console.log("Rendering checks passed: fresh install, existing folder, last folder deleted, one native grid, card order, no toolbars, native search unchanged, Discord drag-event isolation.");
