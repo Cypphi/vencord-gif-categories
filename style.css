@@ -1,0 +1,135 @@
+.vc-gif-categories {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    overflow: auto;
+    color: var(--text-default, var(--text-normal));
+}
+
+.vc-gif-categories button,
+.vc-gif-categories input {
+    font: inherit;
+    color: inherit;
+}
+
+.vc-gif-categories button {
+    border: 1px solid var(--border-subtle, #ffffff20);
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: var(--background-surface-high, var(--background-secondary));
+    cursor: pointer;
+}
+
+.vc-gif-categories button:hover {
+    background: var(--background-modifier-hover, #ffffff15);
+}
+
+
+.vc-gif-categories button:disabled {
+    opacity: .5;
+    cursor: wait;
+}
+
+.vc-gif-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    align-content: start;
+}
+
+.vc-gif-categories .vc-gif-categories-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 125px;
+    overflow-wrap: anywhere;
+}
+
+.vc-gif-categories-card svg {
+    color: var(--brand-400, #949cf7);
+}
+
+.vc-gif-categories-card span {
+    color: var(--text-muted);
+}
+
+.vc-gif-categories .vc-gif-categories-add {
+    border-style: dashed;
+    font-size: 42px;
+}
+
+.vc-gif-categories-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vc-gif-categories-title {
+    margin-right: auto;
+    overflow-wrap: anywhere;
+}
+
+.vc-gif-categories-native {
+    position: relative;
+    flex: 1;
+    min-height: 160px;
+}
+
+.vc-gif-categories-editor fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+.vc-gif-categories-name {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.vc-gif-categories-name input {
+    border: 1px solid var(--border-subtle, #ffffff20);
+    border-radius: 6px;
+    padding: 10px;
+    background: var(--input-background, var(--background-tertiary));
+}
+
+.vc-gif-categories p {
+    margin: 8px 0;
+}
+
+.vc-gif-categories-error {
+    color: var(--text-danger, #ff858b);
+}
+
+.vc-gif-categories-folders {
+    flex-shrink: 0;
+    max-height: 42%;
+    overflow: auto;
+    padding: 3px;
+}
+
+.vc-gif-categories [data-drag-over="true"] {
+    outline: 3px solid var(--brand-500, #5865f2);
+    background: var(--background-modifier-selected, #5865f240);
+}
+
+.vc-gif-categories-card[aria-pressed="true"] {
+    border-color: var(--brand-500, #5865f2);
+}
+
+.vc-gif-categories button:focus-visible,
+.vc-gif-categories input:focus-visible {
+    outline: 2px solid var(--brand-500, #5865f2);
+    outline-offset: 3px;
+}
