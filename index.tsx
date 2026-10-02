@@ -174,7 +174,7 @@ function Categories({ accountId, favorites, query, original }: {
                     <span aria-hidden="true">+</span>
                 </button>
             </div>
-            {categories.length > 0 && <>
+            <>
                 <div className="vc-gif-categories-toolbar">
                     <strong className="vc-gif-categories-title">{active?.name ?? "Unfiled favorites"}</strong>
                     {active && <>
@@ -196,7 +196,7 @@ function Categories({ accountId, favorites, query, original }: {
                         onSelectGIF: selecting ? gif => setSelected(gif) : original.props.onSelectGIF
                     })}</div>
                     : <p>{query ? "No GIFs match your search." : active ? "Drag GIFs here from Unfiled or another folder." : "All favorites are organized. New favorites will appear here."}</p>}
-            </>}
+            </>
         </>}
     </section>;
 }
