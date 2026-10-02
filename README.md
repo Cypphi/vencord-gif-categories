@@ -2,8 +2,8 @@
 
 Organize Discord's favorite GIFs by **left-clicking and dragging them onto folder cards**.
 
-- With no categories, the Favorites panel contains only a **+** card.
-- Click **+**, name a category, and save. Folder cards appear before the **+** card; unfiled favorites appear underneath.
+- Unfiled favorites always appear beneath the folder cards and **+**, including before you create your first category.
+- Click **+**, name a category, and save. Folder cards appear before the **+** card; drag the unfiled favorites underneath onto a folder.
 - Hold the left mouse button on a GIF, drag it onto a folder, and release. The destination highlights while you drag.
 - Click a folder to browse its GIFs. Folder cards remain available above the grid so you can drag a GIF into another folder.
 - Drop a GIF onto **Unfiled / home** to remove its category assignment.
@@ -45,6 +45,12 @@ Optionally pass the path to a downloaded Discord `web.*.js` bundle to check both
 
 ```sh
 node tests/check.mjs /path/to/web.bundle.js
+```
+
+Check the actual initial panel rendering using the existing esbuild dependency in a Vencord checkout:
+
+```sh
+node tests/render.mjs /path/to/Vencord
 ```
 
 In the Vencord source checkout, run `pnpm testTsc` and `pnpm build --standalone`.
