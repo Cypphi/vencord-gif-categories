@@ -63,7 +63,8 @@ function expand(node) {
     }
     return [node, ...expand(node.props.children)];
 }
-const original = React.createElement("native-grid", { data: favorites, onSelectGIF() {} });
+let sent = 0;
+const original = React.createElement("native-grid", { data: favorites, onSelectGIF() { sent++; } });
 async function render(categories) {
     storedCategories = categories;
     instances.clear();
@@ -74,10 +75,21 @@ async function render(categories) {
 }
 for (const categories of [[], [{ id: "cats", name: "Cats", urls: [favorites[0].url] }], []]) {
     const nodes = await render(categories);
-    const plus = nodes.findIndex(node => node.props["aria-label"] === "Create GIF category");
-    const grid = nodes.findIndex(node => node.type === "native-grid");
-    assert.ok(plus >= 0 && grid > plus, "GIF grid must render after the folder creation card, even with no folders");
-    assert.deepEqual(nodes[grid].props.data, categories.length ? [favorites[1]] : favorites);
+    const grids = nodes.filter(node => node.type === "native-grid");
+    assert.equal(grids.length, 1, "Cards and GIFs must use a single native grid");
+    const { data, onSelectGIF } = grids[0].props;
+    const cardCount = categories.length + 1;
+    assert.ok(data.slice(0, cardCount).every(item => "categoryCard" in item));
+    assert.equal(data[cardCount - 1].id, "gif-category:create");
+    assert.deepEqual(Array.from(data.slice(cardCount)), categories.length ? [favorites[1]] : favorites);
+    const plus = expand(plugin.renderCard(data[cardCount - 1], {}, "create"));
+    assert.ok(plus.some(node => node.props["aria-label"] === "Create GIF category"));
+    assert.equal(nodes.filter(node => node.type === "button").length, 0, "No extra toolbar outside the grid");
+    if (categories.length) {
+        onSelectGIF(data[0], { shiftKey: false });
+        assert.equal(sent, 0, "Opening a folder must not send a GIF");
+    }
+
 }
 assert.equal(plugin.renderCategories({ state: { resultType: "Search" } }, original), original);
-console.log("Rendering checks passed: fresh install, existing folder, last folder deleted, card order, native search unchanged.");
+console.log("Rendering checks passed: fresh install, existing folder, last folder deleted, one native grid, card order, no toolbars, native search unchanged.");

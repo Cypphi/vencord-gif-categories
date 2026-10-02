@@ -1,135 +1,108 @@
 .vc-gif-categories {
-    display: flex;
+    position: relative;
     flex: 1;
-    flex-direction: column;
-    gap: 12px;
+    min-width: 0;
     min-height: 0;
     height: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    overflow: auto;
+    overflow: hidden;
     color: var(--text-default, var(--text-normal));
 }
 
-.vc-gif-categories button,
-.vc-gif-categories input {
-    font: inherit;
-    color: inherit;
-}
-
-.vc-gif-categories button {
-    border: 1px solid var(--border-subtle, #ffffff20);
-    border-radius: 8px;
-    padding: 8px 12px;
-    background: var(--background-surface-high, var(--background-secondary));
-    cursor: pointer;
-}
-
-.vc-gif-categories button:hover {
-    background: var(--background-modifier-hover, #ffffff15);
-}
-
-
-.vc-gif-categories button:disabled {
-    opacity: .5;
-    cursor: wait;
-}
-
-.vc-gif-categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    align-content: start;
-}
-
-.vc-gif-categories .vc-gif-categories-card {
+.vc-gif-category-card {
     display: flex;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    min-height: 125px;
-    overflow-wrap: anywhere;
+    gap: 6px;
+    border: 1px solid var(--border-subtle, #ffffff20);
+    border-radius: 8px;
+    padding: 8px;
+    background: var(--background-surface-high, var(--background-secondary));
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    overflow: hidden;
 }
 
-.vc-gif-categories-card svg {
+.vc-gif-category-card span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-gif-category-card svg {
     color: var(--brand-400, #949cf7);
+    flex-shrink: 0;
 }
 
-.vc-gif-categories-card span {
-    color: var(--text-muted);
+.vc-gif-category-card:hover {
+    background: var(--background-modifier-hover, #ffffff15);
 }
 
-.vc-gif-categories .vc-gif-categories-add {
+.vc-gif-category-card[aria-pressed="true"],
+.vc-gif-category-card[data-drag-over="true"] {
+    border-color: var(--brand-500, #5865f2);
+    background: var(--background-modifier-selected, #5865f240);
+}
+
+.vc-gif-category-add {
     border-style: dashed;
-    font-size: 42px;
+    font-size: 36px;
 }
 
-.vc-gif-categories-toolbar {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
+.vc-gif-category-card:focus-visible {
+    outline: 2px solid var(--brand-500, #5865f2);
+    outline-offset: -3px;
 }
 
-.vc-gif-categories-title {
-    margin-right: auto;
-    overflow-wrap: anywhere;
+.vc-gif-category-editor {
+    padding: 12px;
 }
 
-.vc-gif-categories-native {
-    position: relative;
-    flex: 1;
-    min-height: 160px;
-}
-
-.vc-gif-categories-editor fieldset {
+.vc-gif-category-editor fieldset {
     border: 0;
     padding: 0;
     margin: 0;
     min-width: 0;
 }
 
-.vc-gif-categories-name {
+.vc-gif-category-editor label {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin-bottom: 12px;
 }
 
-.vc-gif-categories-name input {
+.vc-gif-category-editor input,
+.vc-gif-category-editor button {
+    padding: 8px;
     border: 1px solid var(--border-subtle, #ffffff20);
     border-radius: 6px;
-    padding: 10px;
-    background: var(--input-background, var(--background-tertiary));
+    color: inherit;
+    font: inherit;
+    background: var(--background-secondary);
 }
 
-.vc-gif-categories p {
-    margin: 8px 0;
+.vc-gif-category-editor button {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.vc-gif-category-editor :focus-visible {
+    outline: 2px solid var(--brand-500, #5865f2);
 }
 
 .vc-gif-categories-error {
+    position: absolute;
+    z-index: 1;
+    inset: auto 8px 8px;
+    margin: 0;
+    padding: 8px;
+    border-radius: 6px;
     color: var(--text-danger, #ff858b);
-}
-
-.vc-gif-categories-folders {
-    flex-shrink: 0;
-    max-height: 42%;
-    overflow: auto;
-    padding: 3px;
-}
-
-.vc-gif-categories [data-drag-over="true"] {
-    outline: 3px solid var(--brand-500, #5865f2);
-    background: var(--background-modifier-selected, #5865f240);
-}
-
-.vc-gif-categories-card[aria-pressed="true"] {
-    border-color: var(--brand-500, #5865f2);
-}
-
-.vc-gif-categories button:focus-visible,
-.vc-gif-categories input:focus-visible {
-    outline: 2px solid var(--brand-500, #5865f2);
-    outline-offset: 3px;
+    background: var(--background-secondary);
 }
