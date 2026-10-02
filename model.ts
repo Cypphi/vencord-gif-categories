@@ -50,7 +50,7 @@ export function moveGif(categories: Category[], url: string, targetId: string | 
     }));
 }
 
-export function unfiledGifs<T extends { url: string; }>(categories: Category[], favorites: T[]): T[] {
+export function unsortedGifs<T extends { url: string; }>(categories: Category[], favorites: T[]): T[] {
     const filed = new Set(categories.flatMap(c => c.urls));
     return favorites.filter(gif => !filed.has(gif.url));
 }
